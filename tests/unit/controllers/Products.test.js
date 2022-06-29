@@ -35,13 +35,13 @@ describe('Na camada controller:', () => {
     })
     
     it('é chamado o status com código http 200', async () => {
-      await Products.list(response, request);
+      await Products.list(request, response);
 
       expect(response.status.calledWith(200)).to.be.true;
     });
 
     it('é chamado o json com as informações corretas', async () => {
-      await Products.list(response, request);
+      await Products.list(request, response);
 
       expect(response.json.calledWith(result)).to.be.true;
     });
@@ -76,7 +76,7 @@ describe('Na camada controller:', () => {
       });
 
       it('é chamado o next passando o objeto certo', async () => {
-        await Products.getById(response, request, next);
+        await Products.getById(request, response, next);
 
         expect(next.calledWith(result)).to.be.true;
       });
@@ -100,13 +100,13 @@ describe('Na camada controller:', () => {
       });
 
       it('é chamado o status com código http 200', async () => {
-        await Products.getById(response, request);
+        await Products.getById(request, response);
 
         expect(response.status.calledWith(200)).to.be.true;
       });
 
       it('é chamado o json com as informações corretas', async () => {
-        await Products.getById(response, request);
+        await Products.getById(request, response);
 
         expect(response.json.calledWith(result)).to.be.true;
       });

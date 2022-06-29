@@ -1,13 +1,13 @@
 const { notFound } = require('../errorMessages/messages');
 const Products = require('../services/Products');
 
-const list = async (res, _req) => {
+const list = async (_req, res) => {
   const data = await Products.list();
 
   res.status(200).json(data);
 };
 
-const getById = async (res, req, next) => {
+const getById = async (req, res, next) => {
   const { id } = req.params;
 
   const data = await Products.getById(id);
