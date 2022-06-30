@@ -43,6 +43,8 @@ services:
   db:
     container_name: store_manager_db
     image: mysql:5.7
+    volumes:
+      - ./migration.sql:/docker-entrypoint-initdb.d/db.sql
     environment:
       MYSQL_ROOT_PASSWORD: 'password'
     ports:
