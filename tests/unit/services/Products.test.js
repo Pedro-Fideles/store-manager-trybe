@@ -95,4 +95,31 @@ describe('Na camada service:', () => {
       });
     });
   });
+
+  describe('Ao criar um novo produto', () => {
+    const payload = { name: 'Produto1' };
+    const result = { id: 1, ...payload };
+
+    before(() => {
+      const execute = result.id;
+
+      sinon.stub(productsModelMock, 'create').resolves(execute);
+    });
+
+    after(() => {
+      productsModelMock.create.restore();
+    });
+
+    it('retorna um objeto', async () => {
+      const response = await Products.create(payload);
+
+      expect(response).to.be.an('object');
+    });
+
+    it('retorna as informações corretas', async () => {
+      const response = await Products.create(payload);
+
+      expect(response).to.deep.equal(result);
+    });
+  });
 });
