@@ -4,7 +4,7 @@ const { expect } = require('chai');
 const Products = require('../../../models/Products');
 const connection = require('../../../models/connection');
 
-describe('Na camada model:', () => {
+describe('Na camada model de Products:', () => {
   describe('Ao listar produtos', () => {
     const result = [
       {
