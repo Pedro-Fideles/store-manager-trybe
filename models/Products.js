@@ -30,8 +30,6 @@ const create = async (product) => {
   return insertId;
 };
 
-create({ name: 'produto1' });
-
 module.exports = {
   list,
   getById,
