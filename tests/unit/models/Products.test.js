@@ -95,4 +95,25 @@ describe('Na camada model:', () => {
       });
     });
   });
+
+  describe('Ao criar um novo produto', () => {
+    const payload = { name: 'Produto1' };
+    const result = 1;
+
+    before(() => {
+      const execute = [{ insertId: result }];
+
+      sinon.stub(connection, 'execute').resolves(execute);
+    });
+
+    after(() => {
+      connection.execute.restore();
+    });
+
+    it('retorna o id do produto', async () => {
+      const response = await Products.create(payload);
+
+      expect(response).to.be.equal(result);
+    });
+  });
 });
