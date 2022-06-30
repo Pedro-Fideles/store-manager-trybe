@@ -20,7 +20,16 @@ const getById = async (req, res, next) => {
   res.status(200).json(data);
 };
 
+const create = async (req, res) => {
+  const { name } = req.body;
+
+  const data = await Products.create({ name });
+
+  res.status(201).json(data);
+};
+
 module.exports = {
   list,
   getById,
+  create,
 };

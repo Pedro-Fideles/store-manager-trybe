@@ -110,6 +110,37 @@ describe('Na camada controller:', () => {
 
         expect(response.json.calledWith(result)).to.be.true;
       });
-    })
+    });
+  });
+
+  describe('Ao criar um novo produto', () => {
+    const result = { id: 1, name: 'Produto1' };
+    const response = {};
+    const request = { body: { name: result.name } };
+
+    before(() => {
+      response.status = sinon.stub()
+        .returns(response);
+      response.json = sinon.stub()
+        .returns();
+      
+      sinon.stub(productsServiceMock, 'create').resolves(result);
+    });
+
+    after(() => {
+      productsServiceMock.create.restore();
+    });
+
+    it('é chamado status com o código http 201', async () => {
+      await Products.create(request, response);
+
+      expect(response.status.calledWith(201)).to.be.true;
+    });
+
+    it('é chamado o json com as informações corretas', async () => {
+      await Products.create(request, response);
+
+      expect(response.json.calledWith(result)).to.be.true;
+    });
   });
 });
