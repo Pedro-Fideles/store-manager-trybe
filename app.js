@@ -5,12 +5,12 @@ const ProductsRouter = require('./routes/Products');
 
 const app = express();
 
-app.use(bodyParser.json());
-
 // não remova esse endpoint, é para o avaliador funcionar
 app.get('/', (_request, response) => {
   response.send();
 });
+
+app.use(bodyParser.json());
 
 app.use('/products', ProductsRouter);
 
