@@ -22,6 +22,6 @@ describe('Na camada model de Sales:', () => {
       const response = await Sales.create();
 
       expect(response).to.be.equal(result);
-    })
+    });
   });
 });
