@@ -76,4 +76,124 @@ describe('Na camada controllers de Sales:', () => {
       });
     });
   });
+
+  describe('Ao listar vendas', () => {
+    const response = {};
+    const request = {};
+    const result = [
+      {
+        saleId: 1,
+        date: "2021-09-09T04:54:29.000Z",
+        productId: 1,
+        quantity: 2
+      },
+      {
+        saleId: 1,
+        date: "2021-09-09T04:54:54.000Z",
+        productId: 2,
+        quantity: 2
+      }
+    ];
+
+    before(() => {
+      const execute = result;
+
+      sinon.stub(salesServiceMock, 'list').resolves(execute);
+
+      response.status = sinon.stub()
+        .returns(response);
+      response.json = sinon.stub()
+        .returns();
+    });
+
+    after(() => {
+      salesServiceMock.list.restore();
+    });
+
+    it('é chamado o status com código http 200', async () => {
+      await Sales.list(request, response);
+
+      expect(response.status.calledWith(200)).to.be.true;
+    });
+
+    it('é chamado o json com as informações corretas', async () => {
+      await Sales.list(request, response);
+
+      expect(response.json.calledWith(result)).to.be.true;
+    });
+  });
+
+  describe('Ao buscar uma venda pelo "id"', () => {
+    const response = {};
+    const request = {};
+    let next = () => { };
+
+    before(() => {
+      response.status = sinon.stub()
+        .returns(response);
+      response.json = sinon.stub()
+        .returns();
+      next = sinon.stub()
+        .returns();
+    });
+
+    describe('e não existe a venda', () => {
+      const result = { code: 404, message: 'Sale not found' };
+      request.params = '11';
+
+      before(() => {
+        const execute = null;
+
+        sinon.stub(salesServiceMock, 'getById').resolves(execute);
+      });
+
+      after(() => {
+        salesServiceMock.getById.restore();
+      });
+
+      it('é chamado o next passando o objeto certo', async () => {
+        await Sales.getById(request, response, next);
+
+        expect(next.calledWith(result)).to.be.true;
+      });
+    });
+
+    describe('e a venda é encontrada', () => {
+      const result = [
+        {
+          date: "2021-09-09T04:54:29.000Z",
+          productId: 1,
+          quantity: 2
+        },
+        {
+          date: "2021-09-09T04:54:54.000Z",
+          productId: 2,
+          quantity: 2
+        }
+      ];
+      request.params = '1';
+
+      before(() => {
+        const execute = result;
+
+        sinon.stub(salesServiceMock, 'getById').resolves(execute);
+      });
+
+      after(() => {
+        salesServiceMock.getById.restore();
+      });
+
+      it('é chamado o status com código http 200', async () => {
+        await Sales.getById(request, response);
+
+        expect(response.status.calledWith(200)).to.be.true;
+      });
+
+      it('é chamado o json com as informações corretas', async () => {
+        await Sales.getById(request, response);
+
+        expect(response.json.calledWith(result)).to.be.true;
+      });
+    });
+  });
 });

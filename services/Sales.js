@@ -17,6 +17,12 @@ const create = async (itemsSold) => {
   return { id: saleId, itemsSold };
 };
 
+const list = () => Sales.list();
+
+const getById = (id) => Sales.getById(id);
+
 module.exports = {
   create,
+  list,
+  getById,
 };
