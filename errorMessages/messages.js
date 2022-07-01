@@ -5,7 +5,10 @@ module.exports = {
   isRequired: (value) => ({
     code: 400, message: `"${value}" is required`,
   }),
-  isLessThan: (value, min) => ({
+  lengthIsLessThan: (value, min) => ({
     code: 422, message: `"${value}" length must be at least ${min} characters long`,
+  }),
+  isLessThan: (value, min) => ({
+    code: 422, message: `"${value}" must be greater than or equal to ${min}`,
   }),
 };
