@@ -17,6 +17,8 @@ const list = async () => {
       sp.quantity
     FROM StoreManager.sales s
     INNER JOIN StoreManager.sales_products sp
+    ON s.id = sp.sale_id
+    ORDER BY s.id, sp.product_id
   `;
 
   const [data] = await connection.execute(query);
@@ -32,6 +34,7 @@ const getById = async (id) => {
       sp.quantity
     FROM StoreManager.sales s
     INNER JOIN StoreManager.sales_products sp
+    ON s.id = sp.sale_id
     WHERE s.id = ?
   `;
   const params = [id];

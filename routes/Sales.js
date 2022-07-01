@@ -6,4 +6,8 @@ const router = express.Router();
 
 router.post('/', validateSale, Sales.create);
 
+router.get('/', Sales.list);
+
+router.get('/:id', Sales.getById);
+
 module.exports = router;
