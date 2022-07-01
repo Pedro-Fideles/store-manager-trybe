@@ -4,7 +4,7 @@ const { expect } = require('chai');
 const Products = require('../../../controllers/Products');
 const productsServiceMock = require('../../../services/Products');
 
-describe('Na camada controller:', () => {
+describe('Na camada controller de Products:', () => {
   describe('Ao listar produtos', () => {
     const response = {};
     const request = {};
