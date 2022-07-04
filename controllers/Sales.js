@@ -28,8 +28,19 @@ const getById = async (req, res, next) => {
   res.status(200).json(data);
 };
 
+const exclude = async (req, res, next) => {
+  const { id } = req.params;
+
+  const saleExists = await Sales.exclude(id);
+
+  if (!saleExists) return next(notFound('Sale'));
+
+  res.status(204).end();
+};
+
 module.exports = {
   create,
   list,
   getById,
+  exclude,
 };
