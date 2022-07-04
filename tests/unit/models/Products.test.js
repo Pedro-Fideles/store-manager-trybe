@@ -116,4 +116,25 @@ describe('Na camada model de Products:', () => {
       expect(response).to.be.equal(result);
     });
   });
+
+  describe('Ao atualizar um produto', () => {
+    const payload = { id: 1, name: 'Produto1' };
+    const result = 1;
+
+    before(() => {
+      const execute = [];
+
+      sinon.stub(connection, 'execute').resolves(execute);
+    });
+
+    after(() => {
+      connection.execute.restore();
+    });
+
+    it('retorna o id do produto', async () => {
+      const response = await Products.update(payload);
+
+      expect(response).to.be.equal(result);
+    });
+  });
 });
