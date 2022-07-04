@@ -137,4 +137,24 @@ describe('Na camada model de Products:', () => {
       expect(response).to.be.equal(result);
     });
   });
+
+  describe('Ao deletar um produto', () => {
+    const payload = 1;
+
+    before(() => {
+      const execute = [];
+
+      sinon.stub(connection, 'execute').resolves(execute);
+    });
+
+    after(() => {
+      connection.execute.restore();
+    });
+
+    it('não retorna nada', async () => {
+      const response = await Products.exclude(payload);
+
+      expect(response).to.be.undefined;
+    });
+  });
 });
