@@ -42,9 +42,9 @@ const update = async (req, res, next) => {
 const exclude = async (req, res, next) => {
   const { id } = req.params;
 
-  const alteredProduct = await Products.exclude(id);
+  const productExists = await Products.exclude(id);
 
-  if (!alteredProduct) return next(notFound('Product'));
+  if (!productExists) return next(notFound('Product'));
 
   res.status(204).end();
 };
