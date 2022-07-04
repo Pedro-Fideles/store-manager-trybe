@@ -28,8 +28,19 @@ const create = async (req, res) => {
   res.status(201).json(data);
 };
 
+const update = async (req, res, next) => {
+  const { id, name } = req.body;
+
+  const alteredProduct = await Products.update({ id, name });
+
+  if (!alteredProduct) return next(notFound('Product'));
+
+  res.status(200).json({ id, name });
+};
+
 module.exports = {
   list,
   getById,
   create,
+  update,
 };

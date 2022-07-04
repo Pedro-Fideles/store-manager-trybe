@@ -143,4 +143,70 @@ describe('Na camada controller de Products:', () => {
       expect(response.json.calledWith(result)).to.be.true;
     });
   });
+
+  describe('Ao atualizar um produto', () => {
+    const response = {};
+    const request = {};
+    let next = () => { };
+
+    before(() => {
+      response.status = sinon.stub()
+        .returns(response);
+      response.json = sinon.stub()
+        .returns();
+      next = sinon.stub()
+        .returns();
+    });
+
+    describe('e não existe o produto', () => {
+      const result = { code: 404, message: 'Product not found' };
+      request.body = { id: 11, name: 'Produto1' };
+
+      before(() => {
+        const execute = false;
+
+        sinon.stub(productsServiceMock, 'update').resolves(execute);
+      });
+
+      after(() => {
+        productsServiceMock.update.restore();
+      });
+
+      it('é chamado o next passando o objeto certo', async () => {
+        await Products.update(request, response, next);
+
+        expect(next.calledWith(result)).to.be.true;
+      });
+    });
+
+    describe('e o produto existe', () => {
+      const result = {
+        id: 1,
+        name: 'Produto1',
+      };
+      request.body = result;
+
+      before(() => {
+        const execute = result;
+
+        sinon.stub(productsServiceMock, 'update').resolves(execute);
+      });
+
+      after(() => {
+        productsServiceMock.update.restore();
+      });
+
+      it('é chamado o status com código http 200', async () => {
+        await Products.update(request, response);
+
+        expect(response.status.calledWith(200)).to.be.true;
+      });
+
+      it('é chamado o json com as informações corretas', async () => {
+        await Products.update(request, response);
+
+        expect(response.json.calledWith(result)).to.be.true;
+      });
+    });
+  });
 });
