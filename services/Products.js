@@ -23,7 +23,7 @@ const update = async (product) => {
 };
 
 const exclude = async (id) => {
-const productExists = await Products.getById(id);
+  const productExists = await Products.getById(id);
 
   if (!productExists) return false;
 

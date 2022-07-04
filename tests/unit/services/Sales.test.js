@@ -168,4 +168,61 @@ describe('Na camada services de Sales:', () => {
       });
     });
   });
+
+  describe('Ao deletar uma venda', () => {
+    describe('e não existe a venda', () => {
+      const payload = '11';
+
+      before(() => {
+        const execute = null;
+
+        sinon.stub(salesModelMock, 'getById').resolves(execute);
+      });
+
+      after(() => {
+        salesModelMock.getById.restore();
+      });
+
+      it('retorna false', async () => {
+        const response = await Sales.exclude(payload);
+
+        expect(response).to.be.false;
+      });
+    });
+
+    describe('e a venda existe', () => {
+      const payload = '1';
+
+      before(() => {
+        const execute = [
+          {
+            date: "2021-09-09T04:54:29.000Z",
+            productId: 1,
+            quantity: 2
+          },
+          {
+            date: "2021-09-09T04:54:54.000Z",
+            productId: 2,
+            quantity: 2
+          }
+        ];
+
+        sinon.stub(salesModelMock, 'getById').resolves(execute);
+        sinon.stub(salesProductsModelMock, 'exclude').resolves();
+        sinon.stub(salesModelMock, 'exclude').resolves();
+      });
+
+      after(() => {
+        salesModelMock.exclude.restore();
+        salesProductsModelMock.exclude.restore();
+        salesModelMock.getById.restore();
+      });
+
+      it('retorna true', async () => {
+        const response = await Sales.exclude(payload);
+
+        expect(response).to.be.true;
+      });
+    })
+  });
 });

@@ -214,6 +214,6 @@ describe('Na camada service de Products:', () => {
 
         expect(response).to.be.true;
       });
-    })
+    });
   });
 });

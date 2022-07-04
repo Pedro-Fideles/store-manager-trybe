@@ -21,8 +21,20 @@ const list = () => Sales.list();
 
 const getById = (id) => Sales.getById(id);
 
+const exclude = async (id) => {
+  const saleExists = await Sales.getById(id);
+
+  if (!saleExists) return false;
+
+  await SalesProducts.exclude(id);
+  await Sales.exclude(id);
+
+  return true;
+};
+
 module.exports = {
   create,
   list,
   getById,
+  exclude,
 };
