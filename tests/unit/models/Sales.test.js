@@ -123,4 +123,24 @@ describe('Na camada model de Sales:', () => {
       });
     });
   });
+
+  describe('Ao excluir uma venda', () => {
+    const payload = 1;
+
+    before(async () => {
+      const execute = [];
+
+      sinon.stub(connection, 'execute').resolves(execute);
+    });
+
+    after(async () => {
+      connection.execute.restore();
+    });
+
+    it('não retorna nada', async () => {
+      const response = await Sales.exclude(payload);
+
+      expect(response).to.be.undefined;
+    });
+  });
 });
