@@ -216,4 +216,59 @@ describe('Na camada service de Products:', () => {
       });
     });
   });
+
+  describe('Ao fazer uma busca com os produtos', () => {
+    const products = [
+      {
+        id: 1,
+        name: 'Martelo de Thor',
+      },
+      {
+        id: 2,
+        name: 'Traje de encolhimento',
+      },
+      {
+        id: 3,
+        name: 'Escudo do Capitão América',
+      },
+    ];
+
+    before(async () => {
+      const execute = products;
+
+      sinon.stub(productsModelMock, 'list').resolves(execute);
+    });
+
+    after(async () => {
+      productsModelMock.list.restore();
+    });
+
+    describe('não há pesquisa', () => {
+      it('retorna todos os produtos', async () => {
+        it('retorna as informações corretas', async () => {
+          const response = await Products.search();
+
+          expect(response).to.deep.equal(result);
+        });
+      });
+    });
+
+    describe('pesquisa por "de"', () => {
+      it('retorna os produtos que possuem "de" no nome', async () => {
+        const response = await Products.search('de');
+
+        const [product1, product2] = products;
+
+        expect(response).to.deep.equal([product1, product2]);
+      });
+    });
+
+    describe('pesquisa por "armadura"', () => {
+      it('retorna um array vazio', async () => {
+        const response = await Products.search();
+
+        expect(response).to.deep.equal([]);
+      });
+    });
+  });
 });

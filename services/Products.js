@@ -32,10 +32,19 @@ const exclude = async (id) => {
   return true;
 };
 
+const search = async (searchTerm) => {
+  const products = await Products.list();
+
+  const searchResult = products.filter(({ name }) => name.includes(searchTerm));
+
+  return searchResult;
+};
+
 module.exports = {
   list,
   getById,
   create,
   update,
   exclude,
+  search,
 };
