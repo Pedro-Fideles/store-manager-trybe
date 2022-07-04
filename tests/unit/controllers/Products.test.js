@@ -32,7 +32,11 @@ describe('Na camada controller de Products:', () => {
         .returns(response);
       response.json = sinon.stub()
         .returns();
-    })
+    });
+
+    after(() => {
+      productsServiceMock.list.restore();
+    });
     
     it('é chamado o status com código http 200', async () => {
       await Products.list(request, response);
@@ -271,6 +275,48 @@ describe('Na camada controller de Products:', () => {
 
         expect(response.end.calledWith()).to.be.true;
       });
+    });
+  });
+
+  describe('Ao buscar produtos', () => {
+    const response = {};
+    const request = { query: 'de' };
+    const result = [
+      {
+        id: 1,
+        name: 'Martelo de Thor',
+      },
+      {
+        id: 2,
+        name: 'Traje de encolhimento',
+      },
+    ];
+
+    before(() => {
+      const execute = result;
+
+      sinon.stub(productsServiceMock, 'search').resolves(execute);
+
+      response.status = sinon.stub()
+        .returns(response);
+      response.json = sinon.stub()
+        .returns();
+    });
+
+    after(() => {
+      productsServiceMock.search.restore();
+    });
+
+    it('é chamado o status com código http 200', async () => {
+      await Products.search(request, response);
+
+      expect(response.status.calledWith(200)).to.be.true;
+    });
+
+    it('é chamado o json com as informações corretas', async () => {
+      await Products.search(request, response);
+
+      expect(response.json.calledWith(result)).to.be.true;
     });
   });
 });

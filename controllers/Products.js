@@ -49,10 +49,19 @@ const exclude = async (req, res, next) => {
   res.status(204).end();
 };
 
+const search = async (req, res) => {
+  const { q } = req.query;
+
+  const data = await Products.search(q);
+
+  res.status(200).json(data);
+};
+
 module.exports = {
   list,
   getById,
   create,
   update,
   exclude,
+  search,
 };
