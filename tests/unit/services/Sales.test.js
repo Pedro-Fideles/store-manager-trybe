@@ -225,4 +225,137 @@ describe('Na camada services de Sales:', () => {
       });
     })
   });
+
+  describe('ao atualizar uma venda', () => {
+    const payloadId = 1;
+    const payloadProducts = [
+      {
+        productId: 1,
+        quantity: 1
+      },
+      {
+        productId: 2,
+        quantity: 5
+      }
+    ];
+
+    describe('e não existe a venda', () => {
+      before(async () => {
+        const execute = null;
+
+        sinon.stub(salesModelMock, 'getById').resolves(execute);
+      });
+
+      after(async () => {
+        salesModelMock.getById.restore();
+      });
+
+      it('retorna "sale does not exist"', async () => {
+        const response = await Sales.update(payloadId, payloadProducts);
+
+        expect(response).to.be.equal('sale does not exist');
+      });
+    });
+
+    describe('e um produto não existe', () => {
+      before(() => {
+        const executeSale = [
+          {
+            date: "2021-09-09T04:54:29.000Z",
+            productId: 1,
+            quantity: 2
+          },
+          {
+            date: "2021-09-09T04:54:54.000Z",
+            productId: 2,
+            quantity: 2
+          }
+        ];
+
+        const executeProduct = [
+          {
+            id: 3,
+            name: 'Martelo de Thor',
+          },
+          {
+            id: 4,
+            name: 'Traje de encolhimento',
+          },
+          {
+            id: 5,
+            name: 'Escudo do Capitão América',
+          },
+        ];
+
+        sinon.stub(salesModelMock, 'getById').resolves(executeSale);
+        sinon.stub(productModelMock, 'list').resolves(executeProduct);
+      });
+
+      after(() => {
+        salesModelMock.getById.restore();
+        productModelMock.list.restore();
+      });
+
+      it('retorna "a product does not exist"', async () => {
+        const response = await Sales.update(payloadId, payloadProducts);
+
+        expect(response).to.be.equal('a product does not exist');
+      });
+    });
+
+    describe('a venda e todos os produtos existem', () => {
+      const result = {
+        saleId: payloadId,
+        itemsUpdated: payloadProducts,
+      }
+
+      before(() => {
+        const executeSale = [
+          {
+            date: "2021-09-09T04:54:29.000Z",
+            productId: 1,
+            quantity: 2
+          },
+          {
+            date: "2021-09-09T04:54:54.000Z",
+            productId: 2,
+            quantity: 2
+          }
+        ];
+
+        const executeProduct = [
+          {
+            id: 1,
+            name: 'Martelo de Thor',
+          },
+          {
+            id: 2,
+            name: 'Traje de encolhimento',
+          },
+          {
+            id: 3,
+            name: 'Escudo do Capitão América',
+          },
+        ];
+
+        sinon.stub(salesModelMock, 'getById').resolves(executeSale);
+        sinon.stub(productModelMock, 'list').resolves(executeProduct);
+        sinon.stub(salesProductsModelMock, 'exclude').resolves();
+        sinon.stub(salesProductsModelMock, 'create').resolves();
+      });
+
+      after(() => {
+        salesModelMock.getById.restore();
+        productModelMock.list.restore();
+        salesProductsModelMock.exclude.restore();
+        salesProductsModelMock.create.restore();
+      });
+
+      it('retorna as informações corretas', async () => {
+        const response = await Sales.update(payloadId, payloadProducts);
+
+        expect(response).to.deep.equal(result);
+      });
+    });
+  });
 });

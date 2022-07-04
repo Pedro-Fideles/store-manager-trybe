@@ -32,9 +32,31 @@ const exclude = async (id) => {
   return true;
 };
 
+const update = async (saleId, newProducts) => {
+  const saleExists = await Sales.getById(saleId);
+
+  if (!saleExists) return 'sale does not exist';
+
+  const products = await Products.list();
+
+  if (!newProducts
+    .every(({ productId }) => products
+      .some(({ id }) => +id === +productId))) {
+    return 'a product does not exist';
+  }
+
+  await SalesProducts.exclude(saleId);
+  await Promise.all(
+    newProducts.map((product) => SalesProducts.create({ saleId, ...product })),
+  );
+
+  return { saleId, itemsUpdated: newProducts };
+};
+
 module.exports = {
   create,
   list,
   getById,
   exclude,
+  update,
 };
