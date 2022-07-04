@@ -10,8 +10,21 @@ const create = async (product) => {
   return { id, ...product };
 };
 
+const update = async (product) => {
+  const { id } = product;
+
+  const productExists = await Products.getById(id);
+
+  if (!productExists) return false;
+
+  await Products.update(product);
+
+  return product;
+};
+
 module.exports = {
   list,
   getById,
   create,
+  update,
 };

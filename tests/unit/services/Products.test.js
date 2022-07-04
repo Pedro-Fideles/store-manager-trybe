@@ -122,4 +122,54 @@ describe('Na camada service de Products:', () => {
       expect(response).to.deep.equal(result);
     });
   });
+
+  describe('Ao atualizar um produto', () => {
+    describe('e não existe o produto', () => {
+      const payload = { id: 11, name: 'Produto1' };
+
+      before(() => {
+        const execute = null;
+
+        sinon.stub(productsModelMock, 'getById').resolves(execute);
+      });
+
+      after(() => {
+        productsModelMock.getById.restore();
+      });
+
+      it('retorna false', async () => {
+        const response = await Products.update(payload);
+
+        expect(response).to.be.false;
+      });
+    });
+
+    describe('e o produto existe', () => {
+      const payload = { id: 1, name: 'Produto1' };
+  
+      before(() => {
+        const execute = payload.id;
+  
+        sinon.stub(productsModelMock, 'update').resolves(execute);
+        sinon.stub(productsModelMock, 'getById').resolves(payload);
+      });
+  
+      after(() => {
+        productsModelMock.update.restore();
+        productsModelMock.getById.restore();
+      });
+  
+      it('retorna um objeto', async () => {
+        const response = await Products.update(payload);
+  
+        expect(response).to.be.an('object');
+      });
+  
+      it('retorna as informações corretas', async () => {
+        const response = await Products.update(payload);
+  
+        expect(response).to.deep.equal(payload);
+      });
+    })
+  });
 });
