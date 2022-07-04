@@ -160,7 +160,8 @@ describe('Na camada controller de Products:', () => {
 
     describe('e não existe o produto', () => {
       const result = { code: 404, message: 'Product not found' };
-      request.body = { id: 11, name: 'Produto1' };
+      request.params = { id: '11' };
+      request.body = { name: 'Produto1' };
 
       before(() => {
         const execute = false;
@@ -181,10 +182,11 @@ describe('Na camada controller de Products:', () => {
 
     describe('e o produto existe', () => {
       const result = {
-        id: 1,
+        id: '1',
         name: 'Produto1',
       };
-      request.body = result;
+      request.params = { id: '1' };
+      request.body = { name: 'Produto1' };
 
       before(() => {
         const execute = result;

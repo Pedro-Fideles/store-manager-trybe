@@ -29,7 +29,8 @@ const create = async (req, res) => {
 };
 
 const update = async (req, res, next) => {
-  const { id, name } = req.body;
+  const { id } = req.params;
+  const { name } = req.body;
 
   const alteredProduct = await Products.update({ id, name });
 
