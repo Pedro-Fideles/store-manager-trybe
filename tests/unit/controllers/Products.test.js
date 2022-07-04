@@ -211,4 +211,66 @@ describe('Na camada controller de Products:', () => {
       });
     });
   });
+
+  describe('Ao deletar um produto', () => {
+    const response = {};
+    const request = {};
+    let next = () => { };
+
+    before(() => {
+      response.status = sinon.stub()
+        .returns(response);
+      response.end = sinon.stub()
+        .returns();
+      next = sinon.stub()
+        .returns();
+    });
+
+    describe('e não existe o produto', () => {
+      const result = { code: 404, message: 'Product not found' };
+      request.params = { id: '11' };
+
+      before(() => {
+        const execute = false;
+
+        sinon.stub(productsServiceMock, 'exclude').resolves(execute);
+      });
+
+      after(() => {
+        productsServiceMock.exclude.restore();
+      });
+
+      it('é chamado o next passando o objeto certo', async () => {
+        await Products.exclude(request, response, next);
+
+        expect(next.calledWith(result)).to.be.true;
+      });
+    });
+
+    describe('e o produto existe', () => {
+      request.params = { id: '1' };
+
+      before(() => {
+        const execute = true;
+
+        sinon.stub(productsServiceMock, 'exclude').resolves(execute);
+      });
+
+      after(() => {
+        productsServiceMock.exclude.restore();
+      });
+
+      it('é chamado o status com código http 204', async () => {
+        await Products.exclude(request, response);
+
+        expect(response.status.calledWith(204)).to.be.true;
+      });
+
+      it('é chamado o end', async () => {
+        await Products.exclude(request, response);
+
+        expect(response.end.calledWith()).to.be.true;
+      });
+    });
+  });
 });

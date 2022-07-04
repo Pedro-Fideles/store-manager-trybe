@@ -39,9 +39,20 @@ const update = async (req, res, next) => {
   res.status(200).json({ id, name });
 };
 
+const exclude = async (req, res, next) => {
+  const { id } = req.params;
+
+  const alteredProduct = await Products.exclude(id);
+
+  if (!alteredProduct) return next(notFound('Product'));
+
+  res.status(204).end();
+};
+
 module.exports = {
   list,
   getById,
   create,
   update,
+  exclude,
 };
