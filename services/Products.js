@@ -22,9 +22,20 @@ const update = async (product) => {
   return product;
 };
 
+const exclude = async (id) => {
+const productExists = await Products.getById(id);
+
+  if (!productExists) return false;
+
+  await Products.exclude(id);
+
+  return true;
+};
+
 module.exports = {
   list,
   getById,
   create,
   update,
+  exclude,
 };

@@ -172,4 +172,48 @@ describe('Na camada service de Products:', () => {
       });
     })
   });
+
+  describe('Ao deletar um produto', () => {
+    describe('e não existe o produto', () => {
+      const payload = '11';
+
+      before(() => {
+        const execute = null;
+
+        sinon.stub(productsModelMock, 'getById').resolves(execute);
+      });
+
+      after(() => {
+        productsModelMock.getById.restore();
+      });
+
+      it('retorna false', async () => {
+        const response = await Products.exclude(payload);
+
+        expect(response).to.be.false;
+      });
+    });
+
+    describe('e o produto existe', () => {
+      const payload = '1';
+
+      before(() => {
+        const execute = { id: payload, name: 'Produto1' };
+
+        sinon.stub(productsModelMock, 'exclude').resolves();
+        sinon.stub(productsModelMock, 'getById').resolves(execute);
+      });
+
+      after(() => {
+        productsModelMock.exclude.restore();
+        productsModelMock.getById.restore();
+      });
+
+      it('retorna true', async () => {
+        const response = await Products.exclude(payload);
+
+        expect(response).to.be.true;
+      });
+    })
+  });
 });
