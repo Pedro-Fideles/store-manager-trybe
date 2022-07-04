@@ -258,4 +258,100 @@ describe('Na camada controllers de Sales:', () => {
       });
     });
   });
+
+  describe('Ao atualizar uma venda', () => {
+    const response = {};
+    const request = {
+      body: [
+        {
+          productId: 1,
+          quantity: 1
+        },
+        {
+          productId: 2,
+          quantity: 5
+        }
+      ]
+    };
+    let next = () => { };
+
+    before(() => {
+      response.status = sinon.stub()
+        .returns(response);
+      response.json = sinon.stub()
+        .returns();
+      next = sinon.stub()
+        .returns();
+    });
+
+    describe('e não existe a venda', () => {
+      const result = { code: 404, message: 'Sale not found' };
+      request.params = { id: '11' };
+
+      before(() => {
+        const execute = 'sale does not exist';
+
+        sinon.stub(salesServiceMock, 'update').resolves(execute);
+      });
+
+      after(() => {
+        salesServiceMock.update.restore();
+      });
+
+      it('é chamado o next passando o objeto certo', async () => {
+        await Sales.update(request, response, next);
+
+        expect(next.calledWith(result)).to.be.true;
+      });
+    });
+
+    describe('e não existe um produto', () => {
+      const result = { code: 404, message: 'Product not found' };
+      request.params = { id: '1' };
+
+      before(() => {
+        const execute = 'a product does not exist';
+
+        sinon.stub(salesServiceMock, 'update').resolves(execute);
+      });
+
+      after(() => {
+        salesServiceMock.update.restore();
+      });
+
+      it('é chamado o next passando o objeto certo', async () => {
+        await Sales.update(request, response, next);
+
+        expect(next.calledWith(result)).to.be.true;
+      });
+    });
+
+    describe('a venda e os produtos existem', () => {
+      request.params = { id: '1' };
+      const result = {
+        saleId: '1',
+        itemsUpdated: request.body,
+      }
+
+      before(() => {
+        sinon.stub(salesServiceMock, 'update').resolves(result);
+      });
+
+      after(() => {
+        salesServiceMock.update.restore();
+      });
+
+      it('é chamado o status com código http 200', async () => {
+        await Sales.update(request, response);
+
+        expect(response.status.calledWith(200)).to.be.true;
+      });
+
+      it('é chamado o json com as informações corretas', async () => {
+        await Sales.update(request, response);
+
+        expect(response.json.calledWith(result)).to.be.true;
+      });
+    });
+  });
 });

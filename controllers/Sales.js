@@ -38,9 +38,21 @@ const exclude = async (req, res, next) => {
   res.status(204).end();
 };
 
+const update = async (req, res, next) => {
+  const { id } = req.params;
+
+  const saleAndProducts = await Sales.update(id, req.body);
+
+  if (saleAndProducts === 'sale does not exist') return next(notFound('Sale'));
+  if (saleAndProducts === 'a product does not exist') return next(notFound('Product'));
+
+  res.status(200).json(saleAndProducts);
+};
+
 module.exports = {
   create,
   list,
   getById,
   exclude,
+  update,
 };
